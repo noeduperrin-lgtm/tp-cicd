@@ -1,10 +1,5 @@
-sudo apt install python3-pip
-sudo apt install python3.14-venv
-python3 -m venv path/to/venv
-source path/to/venv/bin/activate
-pip install package_name
-pip install pytest
-pytest
-
-pip install -r requirements.txt
-pytest
+iniconfig==2.3.1
+packaging==26.3
+pluggy==1.6.0
+Pygments==2.21.0
+pytest==9.1.1
