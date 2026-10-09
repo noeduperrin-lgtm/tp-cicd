@@ -1,15 +1,13 @@
-name: CI/CD
+name: TAG-CI/CD
 
 on:
   push:
-    branches:
-      - main
+    tags:
+      - 'v*'
 
 jobs:
-
   test:
     runs-on: ubuntu-latest
-
     steps:
       - name: Récupérer le code
         uses: actions/checkout@v4
@@ -27,11 +25,9 @@ jobs:
         run: |
           pytest
 
-
   docker:
     needs: test
     runs-on: ubuntu-latest
-
     steps:
       - name: Récupérer le code
         uses: actions/checkout@v4
@@ -44,13 +40,14 @@ jobs:
 
       - name: Construire l'image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/tp-cicd:latest .
+          docker build \
+            -t ${{ secrets.DOCKER_USERNAME }}/tp-cicd:${{ github.ref_name }} .
 
       - name: Publier l'image
         run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/tp-cicd:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/tp-cicd:${{ github.ref_name }}
 
-  deploy :
+  deploy:
     needs: docker
     runs-on: ubuntu-latest
     steps:
